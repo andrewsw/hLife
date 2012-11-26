@@ -32,15 +32,6 @@ ppBoard :: Board -> String
 ppBoard board = unlines $ fmap concat rows
   where rows = do
         let ((xmin, ymin), (xmax, ymax)) = bounds board
-        y <- [ ymin + 1 .. ymax - 1 ]
-        let row y' = do
-              x <- [ xmin + 1 .. xmax - 1 ]
-              return $ show $ board ! (x,y')
-        return $ row y
-
-dumpBoard board = unlines $ fmap concat rows
-  where rows = do
-        let ((xmin, ymin), (xmax, ymax)) = bounds board
         y <- [ ymin .. ymax ]
         let row y' = do
               x <- [ xmin .. xmax ]
@@ -49,47 +40,47 @@ dumpBoard board = unlines $ fmap concat rows
 
 
 mkBoard :: [ [ Cell ] ] -> Board
-mkBoard rows = array ((0,0), (xCount + 1, yCount + 1)) $  zip coords $ concat newRows
+mkBoard rows = array ((0,0), (xlen - 1, ylen - 1)) $  zip coords $ concat rows
     where
-      (yCount, xCount) = (length rows, length $ head rows)
-      deadRow = replicate (xCount + 2) Dead
-      newRows = deadRow : (map wrapRow rows) ++ [ deadRow ]
-      coords = [ (x,y) | y <- [0..yCount + 1], x <- [0..xCount + 1] ]
-
-wrapRow ::[ Cell ] -> [ Cell ]
-wrapRow r = Dead : r ++ [ Dead ]
-
+      (xlen, ylen) = (length $ head rows, length rows)
+      coords = [ (x,y) | y <- [0..ylen - 1], x <- [0..xlen - 1] ]
 
 updateBoard :: Board -> Board
 updateBoard b = b // newCells
     where
-      newCells = mainCells b
+      newCells = map (\c -> (c, updateCell b c)) $ indices b
 
-mainCells :: Board -> [(Coordinate, Cell)]
-mainCells b = map (\c -> (c, updateCell b c)) [ (x,y) | x <- [1..xCount - 1], y <- [1..yCount - 1] ]
-    where
-      (_, (xCount, yCount)) = bounds b
+allCells :: Board -> [(Coordinate, Cell)]
+allCells b = assocs b
 
 updateCell :: Board -> Coordinate -> Cell
-updateCell  board c@(x,y) | neighbors > 3 = Dead
-                          | neighbors < 2 = Dead
-                          | neighbors == 3 = Alive
-                          | neighbors < 3 = cell
+updateCell  board c@(x,y) | neighborCount > 3  = Dead
+                          | neighborCount < 2  = Dead
+                          | neighborCount == 3 = Alive
+                          | neighborCount < 3  = cell
   where cell = board ! c
         addNeighbor = \c' i -> case board ! c' of
           Alive -> i + 1
           Dead -> i
-        neighbors = foldr addNeighbor 0 $ cellNeighbors c
+        neighborCount = foldr addNeighbor 0 $ cellNeighbors bs c
+        bs = bounds board
 
-cellNeighbors :: Coordinate -> [ Coordinate ]
-cellNeighbors (x,y) =[ (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
-                     , (x - 1, y    ),             (x + 1, y    )
-                     , (x - 1, y - 1), (x, y - 1), (x + 1, y - 1) ]
+cellNeighbors :: (Coordinate, Coordinate) -> Coordinate -> [ Coordinate ]
+cellNeighbors bs@((xmin, ymin), (xmax, ymax)) (x,y) = filter boundsCheck neighbors
+    where
+      boundsCheck (x', y') = xmin <= x'
+                              && x' <= xmax
+                              && ymin <= y'
+                              && y' <= ymax
+      neighbors = [ (x - 1, y + 1), (x, y + 1), (x + 1, y + 1)
+                  , (x - 1, y    ),             (x + 1, y    )
+                  , (x - 1, y - 1), (x, y - 1), (x + 1, y - 1)
+                  ]
 
 randomBoard :: Int -> Board
 randomBoard seed =
-  let cells = take (75*75) $ randoms$ mkStdGen seed :: [ Cell ]
-  in  mkBoard $ chunk 75 cells
+  let cells = take (50*50) $ randoms$ mkStdGen seed :: [ Cell ]
+  in  mkBoard $ chunk 50 cells
 
 main :: IO ()
 main = do
@@ -105,7 +96,7 @@ loop b g = do
   case input of
     "q" -> return ()
     "d" -> do
-      putStrLn $ dumpBoard b
+      putStrLn $ ppBoard b
       loop b g
     _   -> do
       let b' = updateBoard b
