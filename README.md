@@ -4,17 +4,23 @@ This is a simple implementation of Conway's Game of Life. Mostly it's just me pl
 
 ## Building
 
-Simply do:
+If you have a reasonably complete Haskell installation, you can probably get away with just simply building the main file as follows:
 
     ghc --make hLife.hs
 
 This will produce hLife as an executable which gives a console version of Life complete with a simple menu.
 
-If you want to run the Gloss version, at this point you have to compile it separately as follows:
+If you want to run the Gloss version, at this point you have to compile it separately as follows, which will need at least the Gloss package, maybe more:
 
     ghc --make LifeGloss.hs -main-is LifeGloss
 
 and then run the resulting binary.
+
+Or, you can use the spiffy cabal file which probably needs some love, but works for me for the moment:
+
+    cabal install --prefix=$SOMEWHERE --user
+
+No guarantees I've done this right as I've not done it before...
 
 ## Running
 
