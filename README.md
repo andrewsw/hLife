@@ -10,12 +10,6 @@ If you have a reasonably complete Haskell installation, you can probably get awa
 
 This will produce hLife as an executable which gives a console version of Life complete with a simple menu.
 
-If you want to run the Gloss version, at this point you have to compile it separately as follows, which will need at least the Gloss package, maybe more:
-
-    ghc --make LifeGloss.hs -main-is LifeGloss
-
-and then run the resulting binary.
-
 Or, you can use the spiffy cabal file which probably needs some love, but works for me for the moment:
 
     cabal install --prefix=$SOMEWHERE --user
@@ -24,7 +18,14 @@ No guarantees I've done this right as I've not done it before...
 
 ## Running
 
-The console version has a simple menu to drive its operation. Both version currently only support running a randomly generated 50x50 board. To quit the Gloss version, try the escape key ;)
+The console version has a simple menu to drive its operation. To quit the Gloss version, try the escape key ;)
+
+### Command Line
+
+    hLife [-g] [width height]
+
+* -g -- optional, run the Gloss version (no controls, just runs)
+* width height -- optional size arguments in number of 'cells'. Must provide *both* arguments or none.
 
 ## Future
 
