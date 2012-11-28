@@ -72,7 +72,7 @@ mkBoard rows = array ((0,0), (xlen - 1, ylen - 1)) $  zip coords $ concat rows
       (xlen, ylen) = (length $ head rows, length rows)
       coords = [ (x,y) | y <- [0..ylen - 1], x <- [0..xlen - 1] ]
 
-randomBoard :: Int -> Board
-randomBoard seed =
-  let cells = take (50*50) $ randoms$ mkStdGen seed :: [ Cell ]
-  in  mkBoard $ chunk 50 cells
+randomBoard :: Int -> Int -> Int -> Board
+randomBoard seed w h =
+  let cells = take (w*h) $ randoms$ mkStdGen seed :: [ Cell ]
+  in  mkBoard $ chunk w cells
