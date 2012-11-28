@@ -1,5 +1,6 @@
-import Life.Console (loop, showBoard)
 import Life (randomBoard)
+import Life.Console as C (loop, showBoard)
+import Life.Gloss as G (loop)
 
 import System.Random
 import System.IO
@@ -11,10 +12,14 @@ main :: IO ()
 main = do
        args <- getArgs
        let (width, height) = case args of
-             a@[_,_] |  [w', h'] <- map read a -> (w', h')
+             a@[_, _]       | [w', h'] <- map read a -> (w', h')
+             a@["-g", _, _] | [w', h'] <- map read (tail a) -> (w', h')
              _ -> (defaultSize, defaultSize)
-       hSetBuffering stdin NoBuffering -- we want single-key commands...
        seed <- randomIO
        let b = randomBoard seed width height
-       showBoard b 0
-       loop b 0
+       case args of
+         ("-g" : _) -> G.loop b 0
+         _          -> do
+           hSetBuffering stdin NoBuffering -- we want single-key commands...
+           showBoard b 0
+           C.loop b 0

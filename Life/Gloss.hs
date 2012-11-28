@@ -1,6 +1,7 @@
-module LifeGloss where
+module Life.Gloss (loop) where
 
-import Life (randomBoard, Cell(..), Board, allCells, updateBoard, Coordinate)
+import Life
+
 import System.Random
 import Graphics.Gloss
 
@@ -21,11 +22,10 @@ board2Picture d b = Pictures $ map (\(pt, c) -> Translate (fst pt) (snd pt) $ ce
       cells = map (\(coord,cell) -> (coord2Point d coord, cell)) $ allCells b
       size  = 10
 
-main :: IO ()
-main = do
-  seed <- randomIO
-  let start = randomBoard seed
-      d = InWindow "Life" (800,600) (10,10)
+loop :: Board -> Int -> IO ()
+loop start _ = do
+  let (_, (w, h)) = boardSize start
+      d = InWindow "Life" (w * 10,h * 10) (10,10)
   simulate d black 8 start (board2Picture d) (\_ _ b -> updateBoard b)
 
 coord2Point :: Display -> Coordinate -> Point
