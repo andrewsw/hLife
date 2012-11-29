@@ -1,9 +1,8 @@
 import Life (randomBoard)
-import Life.Console as C (loop, showBoard)
-import Life.Gloss as G (loop)
+import Life.Console as C (play, showBoard)
+import Life.Gloss as G (play)
 
 import System.Random
-import System.IO
 import System.Environment
 
 defaultSize = 50 :: Int
@@ -18,8 +17,5 @@ main = do
        seed <- randomIO
        let b = randomBoard seed width height
        case args of
-         ("-g" : _) -> G.loop b 0
-         _          -> do
-           hSetBuffering stdin NoBuffering -- we want single-key commands...
-           showBoard b 0
-           C.loop b 0
+         ("-g" : _) -> G.play b
+         _          -> C.play b

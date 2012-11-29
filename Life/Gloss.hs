@@ -1,14 +1,11 @@
-module Life.Gloss (loop) where
+module Life.Gloss (play) where
 
 import Life
-
-import System.Random
-import Graphics.Gloss
+import Graphics.Gloss hiding (play)
 
 displaySize :: Display -> (Int, Int)
 displaySize (InWindow _ (x, y) _) = (x, y)
 displaySize (FullScreen (x, y))   = (x, y)
-
 
 cell2Picture :: Float -> Cell -> Picture
 cell2Picture size c = Pictures [ cellColor c $ square size, Color black $ outline size ]
@@ -21,6 +18,9 @@ board2Picture d b = Pictures $ map (\(pt, c) -> Translate (fst pt) (snd pt) $ ce
     where
       cells = map (\(coord,cell) -> (coord2Point d coord, cell)) $ allCells b
       size  = 10
+
+play :: Board -> IO ()
+play = flip loop 0
 
 loop :: Board -> Int -> IO ()
 loop start _ = do

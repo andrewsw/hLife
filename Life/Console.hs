@@ -1,11 +1,17 @@
-module Life.Console ( loop
+module Life.Console ( play
                     , showBoard
                     ) where
 
 import Life
 
-import System.IO (hFlush, stdout)
+import System.IO
 import Control.Monad (when)
+
+play :: Board -> IO ()
+play b = do
+  hSetBuffering stdin NoBuffering -- we want single key commands
+  showBoard b 0
+  loop b 0
 
 loop :: Board -> Int -> IO ()
 loop b g = do
