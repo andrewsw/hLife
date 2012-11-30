@@ -36,7 +36,7 @@ main = do
 options :: [ OptDescr (Options -> Options) ]
 options =  [ Option ['s'] ["size"]  (ReqArg readSize "SIZE") "board size as <width>x<height>"
            , Option ['g'] ["gloss"] (NoArg setGloss)         "use the Gloss graphical interface"
-           , Option ['f'] ["file"]  (OptArg setFile "FILE")  "read the supplied input file (will center in SIZE)"
+           , Option ['f'] ["file"]  (ReqArg setFile "FILE")  "read the supplied input file (will center in SIZE)"
            ]
 
 setGloss :: Options -> Options
@@ -47,5 +47,5 @@ readSize size opts = opts { width = w, height = h }
   where w = read $ takeWhile (/='x') size
         h = read . tail $ dropWhile (/= 'x') size
 
-setFile :: Maybe FilePath -> Options -> Options
-setFile file opts = opts { inputFile = file }
+setFile :: FilePath -> Options -> Options
+setFile file opts = opts { inputFile = Just file }

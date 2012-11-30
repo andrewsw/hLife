@@ -26,7 +26,7 @@ The console version has a simple menu to drive its operation. To quit the Gloss 
 
 * -s SIZE   --size=SIZE    board size as <width>x<height>
 * -g        --gloss        use the Gloss graphical interface
-* -f[FILE]  --file[=FILE]  read the supplied input file (will center in SIZE)
+* -f FILE   --file=FILE    read the supplied input file (will center in SIZE)
 
 The file option is not supported yet, but will read a file of the following format:
 
