@@ -20,12 +20,23 @@ No guarantees I've done this right as I've not done it before...
 
 The console version has a simple menu to drive its operation. To quit the Gloss version, try the escape key ;)
 
-### Command Line
+### Usage
 
-    hLife [-g] [width height]
+    hLife [OPTION...]
 
-* -g -- optional, run the Gloss version (no controls, just runs)
-* width height -- optional size arguments in number of 'cells'. Must provide *both* arguments or none.
+* -s SIZE   --size=SIZE    board size as <width>x<height>
+* -g        --gloss        use the Gloss graphical interface
+* -f[FILE]  --file[=FILE]  read the supplied input file (will center in SIZE)
+
+The file option is not supported yet, but will read a file of the following format:
+
+    ! This is a comment
+    ....O
+    .....O
+    ...OOO
+    ! the above is a glider
+
+The idea is that the input as read from the file will be centered in the specified board size. So if the above was read in with a specified height of 5, then there would be two complete empty lines, one above and one below the glider. Similarly for the width, the longest line will be used to determine the placement horizontally within the specified size.
 
 ## Future
 
