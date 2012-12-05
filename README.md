@@ -24,9 +24,10 @@ The console version has a simple menu to drive its operation. To quit the Gloss 
 
     hLife [OPTION...]
 
-* -s SIZE   --size=SIZE    board size as <width>x<height>
-* -g        --gloss        use the Gloss graphical interface
-* -f FILE   --file=FILE    read the supplied input file (will center in SIZE)
+*  -s SIZE         --size=SIZE           board size as <width>x<height>. Default size 50x50
+*  -g              --gloss               use the Gloss graphical interface
+*  -f FILE         --file=FILE           read the supplied input file (will center in SIZE)
+*  -q SQUARE-SIZE  --square=SQUARE-SIZE  the size, in pixels of a square (assumes -g). Default 10
 
 The file option is not supported yet, but will read a file of the following format:
 
